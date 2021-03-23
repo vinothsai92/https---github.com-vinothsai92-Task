@@ -1,0 +1,31 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".BaseActivity">
+
+
+    <LinearLayout
+        android:id="@+id/base_LlAppBarContentHolder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/base_FlContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- Enable this line's task programmatically to allow scrolling and
+            app bar behavior when scrolled to be adjusted. Be very sure before
+            including this option in this XML since this is the root layout. This
+            change would be impacted on all screens. If this has to be included, it
+            should be only when all the screens in the application have scroll view
+            and the content is more than the screen real estate and you need the title
+            bar to hide on scrolling -->
+            <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+
+        </FrameLayout>
+    </LinearLayout>
+
+</RelativeLayout>
