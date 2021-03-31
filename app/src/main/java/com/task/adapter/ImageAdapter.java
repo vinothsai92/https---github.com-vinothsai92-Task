@@ -1,19 +1,20 @@
 package com.task.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
-import android.os.Parcelable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.task.DetailedView;
 import com.task.R;
+import com.task.interFace.FragmentChangelistner;
 import com.task.model.ListResponse;
 
 import java.util.ArrayList;
@@ -23,15 +24,17 @@ import androidx.annotation.RequiresApi;
 public class ImageAdapter extends BaseAdapter {
 
     private Context mContext;
-    private ArrayList<ListResponse>  templistResponse;
+    private ArrayList<ListResponse> templistResponse;
+    private FragmentChangelistner fragmentChangelistner;
 
-    public ImageAdapter(Context context, ArrayList<ListResponse> mTemplistResponse) {
+    public ImageAdapter(Context context, ArrayList<ListResponse> mTemplistResponse, FragmentChangelistner fragmentChangelistner) {
         mContext = context;
-        templistResponse=mTemplistResponse;
+        templistResponse = mTemplistResponse;
+        this.fragmentChangelistner = fragmentChangelistner;
     }
 
     public void datachange(ArrayList<ListResponse> mTemplistResponse) {
-        templistResponse=mTemplistResponse;
+        templistResponse = mTemplistResponse;
         notifyDataSetChanged();
     }
 
@@ -50,41 +53,63 @@ public class ImageAdapter extends BaseAdapter {
     @RequiresApi(api = Build.VERSION_CODES.M)
     public View getView(final int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
-
+        ViewHolder viewHolder;
         LayoutInflater inflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.list_row, null);
+            viewHolder = new ViewHolder(convertView);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
+        Picasso.get().load(templistResponse.get(position).getOwner().getAvatarUrl()).into(viewHolder.imageView);
+        viewHolder.txtImgID.setPadding(10, 0, 0, 0);
+        viewHolder.txtImgID.setText(templistResponse.get(position).getName());
+        viewHolder.txtItemID.setPadding(30, 0, 0, 0);
+        viewHolder.txtItemID.setText(templistResponse.get(position).getDescription());
+        viewHolder.editTextComment.setText(templistResponse.get(position).getComments());
 
-        // ColImagePath
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.list_image);
-        imageView.getLayoutParams().height = 60;
-        imageView.getLayoutParams().width = 60;
-        imageView.setPadding(5, 5, 5, 5);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        try {
-            Picasso.get().load(templistResponse.get(position).getOwner().getAvatarUrl()).into(imageView);
+        viewHolder.viewMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fragmentChangelistner.parsingData(templistResponse.get(position), templistResponse.get(position).getId());
+            }
+        });
 
-        } catch (Exception e) {
-            // When Error
-            imageView.setImageResource(android.R.drawable.ic_menu_report_image);
-        }
+        viewHolder.editTextComment.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-        // ColImageID
-        TextView txtImgID = (TextView) convertView.findViewById(R.id.main_title);
-        txtImgID.setPadding(10, 0, 0, 0);
-        txtImgID.setText(templistResponse.get(position).getName());
+            }
 
-        // ColItemID
-        TextView txtItemID = (TextView) convertView.findViewById(R.id.sub_title);
-        txtItemID.setPadding(50, 0, 0, 0);
-        txtItemID.setText(templistResponse.get(position).getDescription());
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                fragmentChangelistner.textChangeListner(charSequence.toString(), templistResponse.get(position).getId());
+            }
 
+            @Override
+            public void afterTextChanged(Editable editable) {
 
+            }
+        });
 
         return convertView;
 
+    }
+
+    static class ViewHolder {
+        ImageView imageView;
+        TextView txtImgID, txtItemID, viewMore;
+        EditText editTextComment;
+
+        ViewHolder(View v) {
+            imageView = (ImageView) v.findViewById(R.id.list_image);
+            viewMore = (TextView) v.findViewById(R.id.view_more);
+            txtImgID = (TextView) v.findViewById(R.id.main_title);
+            txtItemID = (TextView) v.findViewById(R.id.sub_title);
+            editTextComment = (EditText) v.findViewById(R.id.comment);
+        }
     }
 }

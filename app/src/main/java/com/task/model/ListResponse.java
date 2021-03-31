@@ -1,14 +1,16 @@
 package com.task.model;
 
+import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.security.acl.Owner;
 import java.util.ArrayList;
 
-public class ListResponse {
+public class ListResponse implements Serializable,Parcelable  {
 
     @SerializedName("id")
     @Expose
@@ -148,6 +150,87 @@ public class ListResponse {
     @SerializedName("deployments_url")
     @Expose
     private String deploymentsUrl;
+
+    protected ListResponse(Parcel in) {
+        if (in.readByte() == 0) {
+            id = null;
+        } else {
+            id = in.readInt();
+        }
+        nodeId = in.readString();
+        name = in.readString();
+        fullName = in.readString();
+        byte tmp_private = in.readByte();
+        _private = tmp_private == 0 ? null : tmp_private == 1;
+        owner = in.readParcelable(Owner.class.getClassLoader());
+        htmlUrl = in.readString();
+        description = in.readString();
+        byte tmpFork = in.readByte();
+        fork = tmpFork == 0 ? null : tmpFork == 1;
+        url = in.readString();
+        forksUrl = in.readString();
+        keysUrl = in.readString();
+        collaboratorsUrl = in.readString();
+        teamsUrl = in.readString();
+        hooksUrl = in.readString();
+        issueEventsUrl = in.readString();
+        eventsUrl = in.readString();
+        assigneesUrl = in.readString();
+        branchesUrl = in.readString();
+        tagsUrl = in.readString();
+        blobsUrl = in.readString();
+        gitTagsUrl = in.readString();
+        gitRefsUrl = in.readString();
+        treesUrl = in.readString();
+        statusesUrl = in.readString();
+        languagesUrl = in.readString();
+        stargazersUrl = in.readString();
+        contributorsUrl = in.readString();
+        subscribersUrl = in.readString();
+        subscriptionUrl = in.readString();
+        commitsUrl = in.readString();
+        gitCommitsUrl = in.readString();
+        commentsUrl = in.readString();
+        issueCommentUrl = in.readString();
+        contentsUrl = in.readString();
+        compareUrl = in.readString();
+        mergesUrl = in.readString();
+        archiveUrl = in.readString();
+        downloadsUrl = in.readString();
+        issuesUrl = in.readString();
+        pullsUrl = in.readString();
+        milestonesUrl = in.readString();
+        notificationsUrl = in.readString();
+        labelsUrl = in.readString();
+        releasesUrl = in.readString();
+        deploymentsUrl = in.readString();
+        comments = in.readString();
+    }
+
+    public static final Creator<ListResponse> CREATOR = new Creator<ListResponse>() {
+        @Override
+        public ListResponse createFromParcel(Parcel in) {
+            return new ListResponse(in);
+        }
+
+        @Override
+        public ListResponse[] newArray(int size) {
+            return new ListResponse[size];
+        }
+    };
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+    @SerializedName("comments")
+    @Expose
+    private String comments="-";
+
+
 
     public Integer getId() {
         return id;
@@ -517,7 +600,69 @@ public class ListResponse {
         this.deploymentsUrl = deploymentsUrl;
     }
 
-    public static   class Owner {
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        if (id == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeInt(id);
+        }
+        parcel.writeString(nodeId);
+        parcel.writeString(name);
+        parcel.writeString(fullName);
+        parcel.writeByte((byte) (_private == null ? 0 : _private ? 1 : 2));
+        parcel.writeParcelable(owner, i);
+        parcel.writeString(htmlUrl);
+        parcel.writeString(description);
+        parcel.writeByte((byte) (fork == null ? 0 : fork ? 1 : 2));
+        parcel.writeString(url);
+        parcel.writeString(forksUrl);
+        parcel.writeString(keysUrl);
+        parcel.writeString(collaboratorsUrl);
+        parcel.writeString(teamsUrl);
+        parcel.writeString(hooksUrl);
+        parcel.writeString(issueEventsUrl);
+        parcel.writeString(eventsUrl);
+        parcel.writeString(assigneesUrl);
+        parcel.writeString(branchesUrl);
+        parcel.writeString(tagsUrl);
+        parcel.writeString(blobsUrl);
+        parcel.writeString(gitTagsUrl);
+        parcel.writeString(gitRefsUrl);
+        parcel.writeString(treesUrl);
+        parcel.writeString(statusesUrl);
+        parcel.writeString(languagesUrl);
+        parcel.writeString(stargazersUrl);
+        parcel.writeString(contributorsUrl);
+        parcel.writeString(subscribersUrl);
+        parcel.writeString(subscriptionUrl);
+        parcel.writeString(commitsUrl);
+        parcel.writeString(gitCommitsUrl);
+        parcel.writeString(commentsUrl);
+        parcel.writeString(issueCommentUrl);
+        parcel.writeString(contentsUrl);
+        parcel.writeString(compareUrl);
+        parcel.writeString(mergesUrl);
+        parcel.writeString(archiveUrl);
+        parcel.writeString(downloadsUrl);
+        parcel.writeString(issuesUrl);
+        parcel.writeString(pullsUrl);
+        parcel.writeString(milestonesUrl);
+        parcel.writeString(notificationsUrl);
+        parcel.writeString(labelsUrl);
+        parcel.writeString(releasesUrl);
+        parcel.writeString(deploymentsUrl);
+        parcel.writeString(comments);
+    }
+
+
+    public static   class Owner implements Serializable, Parcelable  {
 
         @SerializedName("login")
         @Expose
@@ -573,6 +718,44 @@ public class ListResponse {
         @SerializedName("site_admin")
         @Expose
         private Boolean siteAdmin;
+
+        protected Owner(Parcel in) {
+            login = in.readString();
+            if (in.readByte() == 0) {
+                id = null;
+            } else {
+                id = in.readInt();
+            }
+            nodeId = in.readString();
+            avatarUrl = in.readString();
+            gravatarId = in.readString();
+            url = in.readString();
+            htmlUrl = in.readString();
+            followersUrl = in.readString();
+            followingUrl = in.readString();
+            gistsUrl = in.readString();
+            starredUrl = in.readString();
+            subscriptionsUrl = in.readString();
+            organizationsUrl = in.readString();
+            reposUrl = in.readString();
+            eventsUrl = in.readString();
+            receivedEventsUrl = in.readString();
+            type = in.readString();
+            byte tmpSiteAdmin = in.readByte();
+            siteAdmin = tmpSiteAdmin == 0 ? null : tmpSiteAdmin == 1;
+        }
+
+        public static final Creator<Owner> CREATOR = new Creator<Owner>() {
+            @Override
+            public Owner createFromParcel(Parcel in) {
+                return new Owner(in);
+            }
+
+            @Override
+            public Owner[] newArray(int size) {
+                return new Owner[size];
+            }
+        };
 
         public String getLogin() {
             return login;
@@ -718,6 +901,37 @@ public class ListResponse {
             this.siteAdmin = siteAdmin;
         }
 
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel parcel, int i) {
+            parcel.writeString(login);
+            if (id == null) {
+                parcel.writeByte((byte) 0);
+            } else {
+                parcel.writeByte((byte) 1);
+                parcel.writeInt(id);
+            }
+            parcel.writeString(nodeId);
+            parcel.writeString(avatarUrl);
+            parcel.writeString(gravatarId);
+            parcel.writeString(url);
+            parcel.writeString(htmlUrl);
+            parcel.writeString(followersUrl);
+            parcel.writeString(followingUrl);
+            parcel.writeString(gistsUrl);
+            parcel.writeString(starredUrl);
+            parcel.writeString(subscriptionsUrl);
+            parcel.writeString(organizationsUrl);
+            parcel.writeString(reposUrl);
+            parcel.writeString(eventsUrl);
+            parcel.writeString(receivedEventsUrl);
+            parcel.writeString(type);
+            parcel.writeByte((byte) (siteAdmin == null ? 0 : siteAdmin ? 1 : 2));
+        }
     }
 }
 
